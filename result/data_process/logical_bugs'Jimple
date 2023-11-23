@@ -1,0 +1,228 @@
+example1:
+Block 0:
+[preds: ] [succs: 5 6 1 ]
+r7 := @this: org.apache.hadoop.io.FastByteComparisons$LexicographicalComparerHolder$UnsafeComparer$1;
+$r0 = class "Lsun/misc/Unsafe;";
+
+Block 1:
+[preds: 0 ] [succs: 5 6 2 ]
+$r1 = virtualinvoke $r0.<java.lang.Class: java.lang.reflect.Field getDeclaredField(java.lang.String)>("theUnsafe");
+
+Block 2:
+[preds: 1 ] [succs: 5 6 3 ]
+virtualinvoke $r1.<java.lang.reflect.Field: void setAccessible(boolean)>(1);
+
+Block 3:
+[preds: 2 ] [succs: 5 6 4 ]
+$r2 = virtualinvoke $r1.<java.lang.reflect.Field: java.lang.Object get(java.lang.Object)>(null);
+
+Block 4:
+[preds: 3 ] [succs: ]
+return $r2;
+
+Block 5:
+[preds: 0 1 2 3 ] [succs: ]
+$r5 := @caughtexception;
+$r6 = new java.lang.Error;
+specialinvoke $r6.<java.lang.Error: void <init>()>();
+throw $r6;
+
+Block 6:
+[preds: 0 1 2 3 ] [succs: ]
+$r3 := @caughtexception;
+$r4 = new java.lang.Error;
+specialinvoke $r4.<java.lang.Error: void <init>()>();
+throw $r4;
+
+example2:
+Block 0:
+[preds: ] [succs: 1 2 ]
+r2 := @this: org.apache.hadoop.io.SequenceFile$BlockCompressWriter;
+r0 := @parameter0: java.lang.Object;
+r4 := @parameter1: java.lang.Object;
+$r1 = virtualinvoke r0.<java.lang.Object: java.lang.Class getClass()>();
+$r3 = r2.<org.apache.hadoop.io.SequenceFile$BlockCompressWriter: java.lang.Class keyClass>;
+if $r1 == $r3 goto $r5 = virtualinvoke r4.<java.lang.Object: java.lang.Class getClass()>();
+
+Block 1:
+[preds: 0 ] [succs: ]
+$r30 = new java.io.IOException;
+$r31 = new java.lang.StringBuilder;
+specialinvoke $r31.<java.lang.StringBuilder: void <init>()>();
+$r32 = virtualinvoke $r31.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("wrong key class: ");
+$r33 = virtualinvoke $r32.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r0);
+$r34 = virtualinvoke $r33.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" is not ");
+$r35 = r2.<org.apache.hadoop.io.SequenceFile$BlockCompressWriter: java.lang.Class keyClass>;
+$r36 = virtualinvoke $r34.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r35);
+$r37 = virtualinvoke $r36.<java.lang.StringBuilder: java.lang.String toString()>();
+specialinvoke $r30.<java.io.IOException: void <init>(java.lang.String)>($r37);
+throw $r30;
+
+Block 2:
+[preds: 0 ] [succs: 3 4 ]
+$r5 = virtualinvoke r4.<java.lang.Object: java.lang.Class getClass()>();
+$r6 = r2.<org.apache.hadoop.io.SequenceFile$BlockCompressWriter: java.lang.Class valClass>;
+if $r5 == $r6 goto $r7 = r2.<org.apache.hadoop.io.SequenceFile$BlockCompressWriter: org.apache.hadoop.io.DataOutputBuffer keyBuffer>;
+
+Block 3:
+[preds: 2 ] [succs: ]
+$r22 = new java.io.IOException;
+$r23 = new java.lang.StringBuilder;
+specialinvoke $r23.<java.lang.StringBuilder: void <init>()>();
+$r24 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("wrong value class: ");
+$r25 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r4);
+$r26 = virtualinvoke $r25.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" is not ");
+$r27 = r2.<org.apache.hadoop.io.SequenceFile$BlockCompressWriter: java.lang.Class valClass>;
+$r28 = virtualinvoke $r26.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r27);
+$r29 = virtualinvoke $r28.<java.lang.StringBuilder: java.lang.String toString()>();
+specialinvoke $r22.<java.io.IOException: void <init>(java.lang.String)>($r29);
+throw $r22;
+
+Block 4:
+[preds: 2 ] [succs: 5 6 ]
+$r7 = r2.<org.apache.hadoop.io.SequenceFile$BlockCompressWriter: org.apache.hadoop.io.DataOutputBuffer keyBuffer>;
+$i0 = virtualinvoke $r7.<org.apache.hadoop.io.DataOutputBuffer: int getLength()>();
+$r8 = r2.<org.apache.hadoop.io.SequenceFile$BlockCompressWriter: org.apache.hadoop.io.serializer.Serializer keySerializer>;
+interfaceinvoke $r8.<org.apache.hadoop.io.serializer.Serializer: void serialize(java.lang.Object)>(r0);
+$r9 = r2.<org.apache.hadoop.io.SequenceFile$BlockCompressWriter: org.apache.hadoop.io.DataOutputBuffer keyBuffer>;
+$i1 = virtualinvoke $r9.<org.apache.hadoop.io.DataOutputBuffer: int getLength()>();
+i2 = $i1 - $i0;
+if i2 >= 0 goto $r10 = r2.<org.apache.hadoop.io.SequenceFile$BlockCompressWriter: org.apache.hadoop.io.DataOutputBuffer keyLenBuffer>;
+
+Block 5:
+[preds: 4 ] [succs: ]
+$r17 = new java.io.IOException;
+$r18 = new java.lang.StringBuilder;
+specialinvoke $r18.<java.lang.StringBuilder: void <init>()>();
+$r19 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("negative length keys not allowed: ");
+$r20 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r0);
+$r21 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.String toString()>();
+specialinvoke $r17.<java.io.IOException: void <init>(java.lang.String)>($r21);
+throw $r17;
+
+Block 6:
+[preds: 4 ] [succs: 7 8 ]
+$r10 = r2.<org.apache.hadoop.io.SequenceFile$BlockCompressWriter: org.apache.hadoop.io.DataOutputBuffer keyLenBuffer>;
+staticinvoke <org.apache.hadoop.io.WritableUtils: void writeVInt(java.io.DataOutput,int)>($r10, i2);
+$r11 = r2.<org.apache.hadoop.io.SequenceFile$BlockCompressWriter: org.apache.hadoop.io.DataOutputBuffer valBuffer>;
+$i3 = virtualinvoke $r11.<org.apache.hadoop.io.DataOutputBuffer: int getLength()>();
+$r12 = r2.<org.apache.hadoop.io.SequenceFile$BlockCompressWriter: org.apache.hadoop.io.serializer.Serializer uncompressedValSerializer>;
+interfaceinvoke $r12.<org.apache.hadoop.io.serializer.Serializer: void serialize(java.lang.Object)>(r4);
+$r13 = r2.<org.apache.hadoop.io.SequenceFile$BlockCompressWriter: org.apache.hadoop.io.DataOutputBuffer valBuffer>;
+$i4 = virtualinvoke $r13.<org.apache.hadoop.io.DataOutputBuffer: int getLength()>();
+i5 = $i4 - $i3;
+$r14 = r2.<org.apache.hadoop.io.SequenceFile$BlockCompressWriter: org.apache.hadoop.io.DataOutputBuffer valLenBuffer>;
+staticinvoke <org.apache.hadoop.io.WritableUtils: void writeVInt(java.io.DataOutput,int)>($r14, i5);
+$i6 = r2.<org.apache.hadoop.io.SequenceFile$BlockCompressWriter: int noBufferedRecords>;
+$i7 = $i6 + 1;
+r2.<org.apache.hadoop.io.SequenceFile$BlockCompressWriter: int noBufferedRecords> = $i7;
+$r15 = r2.<org.apache.hadoop.io.SequenceFile$BlockCompressWriter: org.apache.hadoop.io.DataOutputBuffer keyBuffer>;
+$i8 = virtualinvoke $r15.<org.apache.hadoop.io.DataOutputBuffer: int getLength()>();
+$r16 = r2.<org.apache.hadoop.io.SequenceFile$BlockCompressWriter: org.apache.hadoop.io.DataOutputBuffer valBuffer>;
+$i9 = virtualinvoke $r16.<org.apache.hadoop.io.DataOutputBuffer: int getLength()>();
+i10 = $i8 + $i9;
+$i11 = r2.<org.apache.hadoop.io.SequenceFile$BlockCompressWriter: int compressionBlockSize>;
+if i10 < $i11 goto return;
+
+Block 7:
+[preds: 6 ] [succs: 8 ]
+virtualinvoke r2.<org.apache.hadoop.io.SequenceFile$BlockCompressWriter: void sync()>();
+
+Block 8:
+[preds: 6 7 ] [succs: ]
+return;
+
+
+Block 0:
+[preds: ] [succs: 1 8 ]
+r0 := @this: org.apache.hadoop.hdfs.server.namenode.NameNode;
+entermonitor r0;
+
+Block 1:
+[preds: 0 ] [succs: 2 8 ]
+$z0 = r0.<org.apache.hadoop.hdfs.server.namenode.NameNode: boolean stopRequested>;
+
+Block 2:
+[preds: 1 ] [succs: 3 5 8 ]
+if $z0 == 0 goto r0.<org.apache.hadoop.hdfs.server.namenode.NameNode: boolean stopRequested> = 1;
+
+Block 3:
+[preds: 2 ] [succs: 4 8 ]
+exitmonitor r0;
+
+Block 4:
+[preds: 3 ] [succs: ]
+return;
+
+Block 5:
+[preds: 2 ] [succs: 6 8 ]
+r0.<org.apache.hadoop.hdfs.server.namenode.NameNode: boolean stopRequested> = 1;
+
+Block 6:
+[preds: 5 ] [succs: 7 8 ]
+exitmonitor r0;
+
+Block 7:
+[preds: 6 ] [succs: 11 ]
+goto [?= $r1 = r0.<org.apache.hadoop.hdfs.server.namenode.NameNode: org.apache.hadoop.hdfs.server.namenode.ha.HAState state>];
+
+Block 8:
+[preds: 0 1 2 3 5 6 8 9 ] [succs: 9 8 ]
+$r10 := @caughtexception;
+
+Block 9:
+[preds: 8 ] [succs: 10 8 ]
+exitmonitor r0;
+
+Block 10:
+[preds: 9 ] [succs: ]
+throw $r10;
+
+Block 11:
+[preds: 7 ] [succs: 12 14 ]
+$r1 = r0.<org.apache.hadoop.hdfs.server.namenode.NameNode: org.apache.hadoop.hdfs.server.namenode.ha.HAState state>;
+if $r1 == null goto (branch);
+
+Block 12:
+[preds: 11 ] [succs: 13 15 ]
+$r7 = r0.<org.apache.hadoop.hdfs.server.namenode.NameNode: org.apache.hadoop.hdfs.server.namenode.ha.HAState state>;
+$r6 = r0.<org.apache.hadoop.hdfs.server.namenode.NameNode: org.apache.hadoop.hdfs.server.namenode.ha.HAContext haContext>;
+
+Block 13:
+[preds: 12 ] [succs: 14 15 ]
+virtualinvoke $r7.<org.apache.hadoop.hdfs.server.namenode.ha.HAState: void exitState(org.apache.hadoop.hdfs.server.namenode.ha.HAContext)>($r6);
+
+Block 14:
+[preds: 11 13 ] [succs: 16 ]
+goto [?= specialinvoke r0.<org.apache.hadoop.hdfs.server.namenode.NameNode: void stopCommonServices()>()];
+
+Block 15:
+[preds: 12 13 ] [succs: 16 ]
+$r8 := @caughtexception;
+$r9 = <org.apache.hadoop.hdfs.server.namenode.NameNode: org.apache.commons.logging.Log LOG>;
+interfaceinvoke $r9.<org.apache.commons.logging.Log: void warn(java.lang.Object,java.lang.Throwable)>("Encountered exception while exiting state ", $r8);
+
+Block 16:
+[preds: 14 15 ] [succs: 17 18 ]
+specialinvoke r0.<org.apache.hadoop.hdfs.server.namenode.NameNode: void stopCommonServices()>();
+$r2 = <org.apache.hadoop.hdfs.server.namenode.NameNode: org.apache.hadoop.hdfs.server.namenode.metrics.NameNodeMetrics metrics>;
+if $r2 == null goto $r3 = r0.<org.apache.hadoop.hdfs.server.namenode.NameNode: org.apache.hadoop.hdfs.server.namenode.FSNamesystem namesystem>;
+
+Block 17:
+[preds: 16 ] [succs: 18 ]
+$r5 = <org.apache.hadoop.hdfs.server.namenode.NameNode: org.apache.hadoop.hdfs.server.namenode.metrics.NameNodeMetrics metrics>;
+virtualinvoke $r5.<org.apache.hadoop.hdfs.server.namenode.metrics.NameNodeMetrics: void shutdown()>();
+
+Block 18:
+[preds: 16 17 ] [succs: 19 20 ]
+$r3 = r0.<org.apache.hadoop.hdfs.server.namenode.NameNode: org.apache.hadoop.hdfs.server.namenode.FSNamesystem namesystem>;
+if $r3 == null goto return;
+
+Block 19:
+[preds: 18 ] [succs: 20 ]
+$r4 = r0.<org.apache.hadoop.hdfs.server.namenode.NameNode: org.apache.hadoop.hdfs.server.namenode.FSNamesystem namesystem>;
+virtualinvoke $r4.<org.apache.hadoop.hdfs.server.namenode.FSNamesystem: void shutdown()>();
+
+Block 20:
+[preds: 18 19 ] [succs: ]
+return;

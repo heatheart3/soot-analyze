@@ -1,28 +1,31 @@
 
 package org.example;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Iterator;
 import java.util.List;
 
 import java.io.PrintStream;
 import java.io.FileNotFoundException;
-import soot.Body;
-import soot.Scene;
-import soot.SootClass;
-import soot.SootMethod;
-import soot.Unit;
+
+import javafx.scene.transform.Shear;
+import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
+import soot.*;
 import soot.jimple.ThrowStmt;
 import soot.toolkits.graph.Block;
 import soot.toolkits.graph.BlockGraph;
 import soot.toolkits.graph.ExceptionalBlockGraph;
 import soot.util.Chain;
-
+import sun.nio.cs.US_ASCII;
 
 
 public class SearchSpecificPattern {
-        public static void nameKeywordPatternAnalyze(boolean resultOutputMark) throws FileNotFoundException
+        static String resultPath = "."+File.separator+"result"+File.separator;
+        static String analysisResultPath = resultPath + "analysis_result"+File.separator;
+        public static void nameKeywordPatternAnalyze(boolean resultOutputMark, String fileName) throws FileNotFoundException
         {
             int eligible_methods_cnt = 0, total_methods = 0;
-            PrintStream ps = new PrintStream("nameKeywordPatternResult.txt");
+            PrintStream ps = new PrintStream(new FileOutputStream(new File(analysisResultPath+fileName)));
             if(resultOutputMark) {
                 System.setOut(ps);
             }
@@ -50,10 +53,10 @@ public class SearchSpecificPattern {
             if(resultOutputMark)
                 ps.close();
         }
-        public static void if_throwPatternAnalyze(boolean resultOutputMark) throws FileNotFoundException
+        public static void if_throwPatternAnalyze(boolean resultOutputMark, String fileName) throws FileNotFoundException
         {
             int eligible_methods_cnt = 0, total_methods = 0;
-            PrintStream ps = new PrintStream("if_throwPatternResult.txt");
+            PrintStream ps = new PrintStream(new FileOutputStream(new File(analysisResultPath+fileName)));
             if(resultOutputMark) {
                 System.setOut(ps);
             }
@@ -75,22 +78,49 @@ public class SearchSpecificPattern {
                         //Soot can't analyze methods without activeBody, so we will skip them.
                         continue;
                     }
+
                     BlockGraph bg = new ExceptionalBlockGraph(body);
                     List<Block> blocks = bg.getBlocks();
                     for(Block block: blocks)
                     {
+                        //avoid catching try-catch block
+                        if(!block.getHead().getUseBoxes().isEmpty()) {
+                            String headUseValueString = block.getHead().getUseBoxes().get(0).getValue().toString();
+                            if (headUseValueString.equals("@caughtexception")) {
+                                continue;
+                            }
+                        }
+
                         Iterator<Unit> unitIterator = block.iterator();
                         while (unitIterator.hasNext())
                         {
                             Unit unit = unitIterator.next();
+
                             if(unit instanceof ThrowStmt){
                                 //If there are predecessors, it means CFG has branched before this block.
                                 if(!block.getPreds().isEmpty())
                                 {
+                                    /* avoid throwstmt produced by synchronized. the logic of synchronized block is similar
+                                      to try block. Every stmt may throw an exception thus Jimple code will add a basic blocks
+                                      to catch exception. Besides, the process of exiting monitor can cause an exception,
+                                      so Jimple code adds a basic block to catch exception caused by failing to exit monitor.
+                                     */
+                                    if(block.getPreds().size() == 1) {
+                                        Iterator<Unit> predBlockIterator = block.getPreds().get(0).iterator();
+                                        boolean synchronizedMark = false;
+                                        while (predBlockIterator.hasNext()) {
+                                            Unit unitInPredBlock = predBlockIterator.next();
+                                            if (unitInPredBlock.toString().split(" ")[0].equals("exitmonitor")) {
+                                                synchronizedMark = true;
+                                                break;
+                                            }
+                                        }
+                                        if(synchronizedMark)
+                                            break;
+                                    }
                                     System.out.println("Class:"+sootClass.getShortName() + " Method:" + method.getName() + "    Source Code Line:" + unit.getJavaSourceStartLineNumber());
                                     eligible_methods_cnt += 1;
                                 }
-
                             }
                         }
                     }
@@ -104,10 +134,11 @@ public class SearchSpecificPattern {
 
         public static void main(String[] args) throws FileNotFoundException {
             SootInitializer.init();
-            if_throwPatternAnalyze(true);
-            nameKeywordPatternAnalyze(true);
+            if_throwPatternAnalyze(true,"if_throwPatternResult3.0.txt" );
+//            nameKeywordPatternAnalyze(true, "nameKeywordPatternResult.txt");
 
         }
+
 
 }
 

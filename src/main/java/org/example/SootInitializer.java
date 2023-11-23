@@ -16,6 +16,8 @@ public class SootInitializer {
         Options.v().set_whole_program(true);
         Options.v().set_keep_line_number(true);
         Options.v().set_output_format(Options.output_format_none);
+        Options.v().set_allow_phantom_elms(true);
+        Options.v().set_allow_phantom_refs(true);
     }
 
     //Load dependencies path to soot's ClassPath

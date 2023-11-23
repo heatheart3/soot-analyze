@@ -1,0 +1,23 @@
+String testClassName = "org.apache.hadoop.io.FastByteComparisons$LexicographicalComparerHolder$UnsafeComparer$1";
+String testMethodName = "run";
+
+String testClassName = "org.apache.hadoop.io.SequenceFile$BlockCompressWriter";
+String testMethodName = "append";
+
+ String tempSootClassName = sootClass.getName();
+                                String tempMethodName = method.getName();
+                                String testClassName = "org.apache.hadoop.io.FastByteComparisons$LexicographicalComparerHolder$UnsafeComparer$1";
+                                String testMethodName = "run";
+                                int a1= 0;
+                                boolean x = (tempSootClassName.equals(testClassName)&& tempMethodName.equals(testMethodName));
+                                if(x==true);
+                                {
+                                    if(x == true) {
+                                        Unit headBlockUnit = block.getHead();
+                                        String headUseValueString = headBlockUnit.getUseBoxes().get(0).getValue().toString();
+                                        if(headUseValueString.equals("@caughtexception"))
+                                        {
+                                            continue;
+                                        }
+                                    }
+                                }
